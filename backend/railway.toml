@@ -1,0 +1,20 @@
+[build]
+  builder = "heroku/buildpacks:20"
+
+[deploy]
+  startCommand = "java -jar target/diary-platform-1.0.0.jar"
+  restartPolicyType = "ON_FAILURE"
+  restartPolicyMaxRetries = 10
+
+[[services]]
+  name = "emotional-diary-api"
+
+  [services.tcp]
+    type = "tcp"
+
+  [[services.ports]]
+    port = 8080
+
+  [[services.env]]
+    key = "PORT"
+    value = "8080"

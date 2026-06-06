@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: emotional-diary-api
+    runtime: java
+    plan: free
+    buildCommand: mvn clean package -DskipTests
+    startCommand: java -jar target/diary-platform-1.0.0.jar
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: JDBC_DATABASE_URL
+        sync: false
+      - key: DATABASE_USERNAME
+        sync: false
+      - key: DATABASE_PASSWORD
+        sync: false
+      - key: QWEN_API_KEY
+        sync: false

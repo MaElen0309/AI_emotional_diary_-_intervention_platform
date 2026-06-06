@@ -1,0 +1,44 @@
+# ============================================
+# AI情绪日记与干预平台 - 生产环境配置
+# 部署到云平台时，以下变量会自动从平台环境变量读取
+# ============================================
+
+server:
+  port: ${PORT:8080}
+  servlet:
+    context-path: /api
+    session:
+      timeout: 30m
+
+spring:
+  datasource:
+    url: ${JDBC_DATABASE_URL:jdbc:mysql://localhost:3306/emotional_diary?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai}
+    username: ${DATABASE_USERNAME:root}
+    password: ${DATABASE_PASSWORD:1234}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+mybatis:
+  type-aliases-package: com.emotional.diary.entity
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# 通义千问API配置 (从阿里云DashScope获取)
+qwen:
+  api-key: sk-c001bdba1f6a47ba9884d9b76cc36bc7
+  model: qwen-max
+
+# 文件上传路径（云平台使用临时目录）
+file:
+  upload-path: ${FILE_UPLOAD_PATH:/tmp/uploads/}
+
+# Session配置
+security:
+  session:
+    enable: true
