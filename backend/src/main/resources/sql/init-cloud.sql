@@ -1,7 +1,6 @@
--- AI情绪日记与干预平台数据库脚本
--- 创建数据库
-CREATE DATABASE IF NOT EXISTS emotional_diary DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE emotional_diary;
+-- AI情绪日记与干预平台 - 云端数据库初始化脚本
+-- 适用于 PlanetScale / Render / Railway 等云数据库
+-- 注意：不要包含 CREATE DATABASE 语句（云平台会自动创建）
 
 -- 用户表
 CREATE TABLE sys_user (
@@ -21,7 +20,7 @@ CREATE TABLE sys_user (
     grade VARCHAR(20) COMMENT '年级',
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
-) ENGINE=InnoDB COMMENT='用户信息表';
+);
 
 -- 情绪日记表
 CREATE TABLE emotion_diary (
@@ -39,9 +38,8 @@ CREATE TABLE emotion_diary (
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     INDEX idx_user_id (user_id),
-    INDEX idx_create_time (create_time),
-    FOREIGN KEY (user_id) REFERENCES sys_user(id)
-) ENGINE=InnoDB COMMENT='情绪日记表';
+    INDEX idx_create_time (create_time)
+);
 
 -- 树洞内容表
 CREATE TABLE treehole_content (
@@ -63,9 +61,8 @@ CREATE TABLE treehole_content (
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     INDEX idx_audit_status (audit_status),
-    INDEX idx_category_id (category_id),
-    FOREIGN KEY (user_id) REFERENCES sys_user(id)
-) ENGINE=InnoDB COMMENT='树洞内容表';
+    INDEX idx_category_id (category_id)
+);
 
 -- 树洞分类表
 CREATE TABLE treehole_category (
@@ -75,7 +72,7 @@ CREATE TABLE treehole_category (
     sort_order INT DEFAULT 0 COMMENT '排序序号',
     status TINYINT DEFAULT 1 COMMENT '状态：0-禁用，1-启用',
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
-) ENGINE=InnoDB COMMENT='树洞分类表';
+);
 
 -- 树洞评论表
 CREATE TABLE treehole_comment (
@@ -88,9 +85,8 @@ CREATE TABLE treehole_comment (
     like_count INT DEFAULT 0 COMMENT '点赞数',
     audit_status TINYINT DEFAULT 0 COMMENT '审核状态：0-待审核，1-已通过，2-已拒绝',
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    INDEX idx_content_id (content_id),
-    FOREIGN KEY (content_id) REFERENCES treehole_content(id)
-) ENGINE=InnoDB COMMENT='树洞评论表';
+    INDEX idx_content_id (content_id)
+);
 
 -- 心理调节方案表
 CREATE TABLE solution (
@@ -113,9 +109,8 @@ CREATE TABLE solution (
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     INDEX idx_status (status),
-    INDEX idx_category (category),
-    FOREIGN KEY (author_id) REFERENCES sys_user(id)
-) ENGINE=InnoDB COMMENT='心理调节方案表';
+    INDEX idx_category (category)
+);
 
 -- 方案使用记录表
 CREATE TABLE solution_usage_record (
@@ -129,7 +124,7 @@ CREATE TABLE solution_usage_record (
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '使用时间',
     INDEX idx_user_id (user_id),
     INDEX idx_solution_id (solution_id)
-) ENGINE=InnoDB COMMENT='方案使用记录表';
+);
 
 -- 系统参数配置表
 CREATE TABLE system_config (
@@ -140,7 +135,7 @@ CREATE TABLE system_config (
     description VARCHAR(255) COMMENT '配置描述',
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
-) ENGINE=InnoDB COMMENT='系统参数配置表';
+);
 
 -- 操作日志表
 CREATE TABLE operation_log (
@@ -159,7 +154,7 @@ CREATE TABLE operation_log (
     INDEX idx_user_id (user_id),
     INDEX idx_operation (operation),
     INDEX idx_create_time (create_time)
-) ENGINE=InnoDB COMMENT='操作日志表';
+);
 
 -- AI分析记录表
 CREATE TABLE ai_analysis_record (
@@ -176,10 +171,10 @@ CREATE TABLE ai_analysis_record (
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '分析时间',
     INDEX idx_user_id (user_id),
     INDEX idx_target (target_type, target_id)
-) ENGINE=InnoDB COMMENT='AI分析记录表';
+);
 
 -- 插入初始数据
--- 默认密码：123456（SHA-256加密，盐值：emotional_diary_2024）
+-- 默认密码：123456（SHA-256加密）
 INSERT INTO sys_user (username, password, real_name, nickname, role, status) VALUES
 ('admin', '4XrrgwgFzse8X1mXtMUtQr0Sz40rDSERj61FmHCSWwg=', '系统管理员', '管理员', 2, 1),
 ('teacher01', '4XrrgwgFzse8X1mXtMUtQr0Sz40rDSERj61FmHCSWwg=', '张老师', '张老师', 1, 1);
