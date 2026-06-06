@@ -2,6 +2,8 @@
 
 <p align="center">
   <strong>基于 Spring Boot + Vue 3 + 通义千问AI 的情绪管理与心理干预平台</strong>
+  <br>
+  <em>现代化UI设计 · 全端响应式 · 渐变主题 · 流畅动画</em>
 </p>
 
 <p align="center">
@@ -9,6 +11,7 @@
   <img src="https://img.shields.io/badge/Vue.js-3.x-blue" alt="Vue 3" />
   <img src="https://img.shields.io/badge/MySQL-8.0+-orange" alt="MySQL" />
   <img src="https://img.shields.io/badge/AI-通义千问-purple" alt="通义千问" />
+  <img src="https://img.shields.io/badge/UI-Modern%20Design-pink" alt="Modern UI" />
 </p>
 
 ---
@@ -26,6 +29,14 @@
 | 心理方案 | 基于情绪数据推荐专业调节方案（音乐、运动、冥想等） |
 | AI对话 | 集成通义千问大模型，提供智能心理咨询与情感陪伴 |
 | 用户管理 | 学生/老师/管理员三角色权限体系 |
+
+### UI设计亮点
+
+- **深色渐变侧边栏** - 紫色系主题 (`#6c63ff`)，从暗蓝到靛青的180度渐变
+- **分屏登录页** - 桌面端左右布局（品牌展示+表单），移动端品牌区置顶
+- **仪表盘欢迎横幅** - 渐变背景 + 悬浮统计卡片 + hover上浮动画
+- **全端响应式** - 移动端抽屉菜单 + 自适应网格 + 触摸优化
+- **统一设计语言** - 12-16px圆角 / 多层柔和阴影 / 滚动条美化 / Element Plus主题覆盖
 
 ### 系统截图
 
