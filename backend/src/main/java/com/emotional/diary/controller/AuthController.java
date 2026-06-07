@@ -63,10 +63,28 @@ public class AuthController {
         Long userId = (Long) session.getAttribute("currentUserId");
         String oldPassword = params.get("oldPassword");
         String newPassword = params.get("newPassword");
-        
+
         try {
             userService.updatePassword(userId, oldPassword, newPassword);
             return Result.success("密码修改成功");
+        } catch (RuntimeException e) {
+            return Result.error(e.getMessage());
+        }
+    }
+
+    @PutMapping("/profile")
+    public Result<String> updateProfile(@RequestBody Map<String, String> params, HttpSession session) {
+        SysUser user = (SysUser) session.getAttribute("currentUser");
+        if (user == null) {
+            return Result.error(401, "未登录");
+        }
+        try {
+            userService.updateProfile(user.getId(), params);
+            // 更新session中的用户信息
+            SysUser updatedUser = userService.getUserById(user.getId());
+            session.setAttribute("currentUser", updatedUser);
+            updatedUser.setPassword(null);
+            return Result.success("更新成功");
         } catch (RuntimeException e) {
             return Result.error(e.getMessage());
         }

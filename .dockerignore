@@ -1,0 +1,12 @@
+# Docker 构建忽略文件
+node_modules
+dist
+target
+.git
+.gitignore
+*.md
+.env.local
+.DS_Store
+.idea
+.vscode
+*.log

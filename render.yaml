@@ -1,0 +1,42 @@
+# Render.com 部署配置
+# 使用方法: 将代码推送到 GitHub 后，在 Render 中导入此仓库
+
+services:
+  # ========== PostgreSQL 数据库（免费） ==========
+  - type: psql
+    name: emotional-diary-db
+    plan: free
+    databaseName: emotional_diary
+    user: emotional_user
+
+  # ========== Web 服务 ==========
+  - type: web
+    name: ai-emotional-diary
+    plan: free
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    envVars:
+      # 数据库连接（Render 自动注入 DATABASE_URL）
+      - key: JDBC_DATABASE_URL
+        fromService:
+          name: emotional-diary-db
+          type: psql
+          property: jdbcurl
+      - key: DATABASE_USERNAME
+        fromService:
+          name: emotional-diary-db
+          type: psql
+          property: user
+      - key: DATABASE_PASSWORD
+        fromService:
+          name: emotional-diary-db
+          type: psql
+          property: password
+      # 通义千问 API Key（请替换为你的 Key）
+      - key: QWEN_API_KEY
+        value: sk-c001bdba1f6a47ba9884d9b76cc36bc7
+    disk:
+      name: uploads
+      mountPath: /app/uploads
+      sizeGB: 1

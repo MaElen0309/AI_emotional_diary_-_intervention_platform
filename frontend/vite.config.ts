@@ -9,6 +9,8 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
+  // 生产环境基础路径（Docker 部署时为根路径）
+  base: './',
   server: {
     port: 3000,
     host: '0.0.0.0',
@@ -19,5 +21,12 @@ export default defineConfig({
         changeOrigin: true
       }
     }
+  },
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+    sourcemap: false,
+    // 确保构建产物兼容
+    target: 'es2015'
   }
 })

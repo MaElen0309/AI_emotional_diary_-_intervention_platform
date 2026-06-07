@@ -1,7 +1,13 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 
 const routes: RouteRecordRaw[] = [
+  {
+    path: '/register',
+    name: 'Register',
+    component: () => import('@/views/login/RegisterView.vue'),
+    meta: { title: '注册' }
+  },
   {
     path: '/login',
     name: 'Login',
@@ -48,6 +54,12 @@ const routes: RouteRecordRaw[] = [
         name: 'AiAnalysis',
         component: () => import('@/views/ai/AiAnalysis.vue'),
         meta: { title: 'AI分析', icon: 'MagicStick' }
+      },
+      {
+        path: 'profile',
+        name: 'Profile',
+        component: () => import('@/views/profile/ProfileView.vue'),
+        meta: { title: '个人信息', icon: 'UserFilled' }
       }
     ]
   },
@@ -86,27 +98,27 @@ const routes: RouteRecordRaw[] = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes
 })
 
 router.beforeEach((to, _from, next) => {
   document.title = `${to.meta.title || ''} - AI情绪日记平台`
-  
+
   if (to.path !== '/login') {
     const userStr = sessionStorage.getItem('currentUser')
     if (!userStr) {
       next('/login')
       return
     }
-    
+
     const user = JSON.parse(userStr)
-    if (to.meta.requiresAdmin && user.role !== 2) {
+    if (to.meta.requiresAdmin && user.role !== 2 && user.role !== 1) {
       next('/')
       return
     }
   }
-  
+
   next()
 })
 

@@ -1,6 +1,6 @@
 # ============================================
-# AI情绪日记与干预平台 - 生产环境配置
-# 部署到云平台时，以下变量会自动从平台环境变量读取
+# AI情绪日记与干预平台 - 配置文件
+# 本地开发用 MySQL，云平台(Render)自动切换 PostgreSQL
 # ============================================
 
 server:
@@ -11,32 +11,55 @@ server:
       timeout: 30m
 
 spring:
+  # 自动检测数据库类型（PostgreSQL 或 MySQL）
   datasource:
     url: ${JDBC_DATABASE_URL:jdbc:mysql://localhost:3306/emotional_diary?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true}
     username: ${DATABASE_USERNAME:root}
     password: ${DATABASE_PASSWORD:1234}
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: ${DB_DRIVER:com.mysql.cj.jdbc.Driver}
+    hikari:
+      connection-timeout: 30000
+      maximum-pool-size: 10
 
+  # 生产环境关闭 Thymeleaf 缓存
+  thymeleaf:
+    cache: false
+
+  # 文件上传配置
   servlet:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
+
+  # Jackson JSON 配置
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Shanghai
 
 mybatis:
   type-aliases-package: com.emotional.diary.entity
   mapper-locations: classpath:mapper/*.xml
   configuration:
     map-underscore-to-camel-case: true
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# 日志级别（生产环境可调整为 WARN）
+logging:
+  level:
+    com.emotional.diary: DEBUG
+    org.mybatis: DEBUG
 
 # 通义千问API配置 (从阿里云DashScope获取)
 qwen:
-  api-key: sk-c001bdba1f6a47ba9884d9b76cc36bc7
+  api-key: ${QWEN_API_KEY:sk-c001bdba1f6a47ba9884d9b76cc36bc7}
   model: qwen-max
 
 # 文件上传路径（云平台使用临时目录）
 file:
   upload-path: ${FILE_UPLOAD_PATH:/tmp/uploads/}
+
+# 前端静态资源路径（Docker 构建后使用）
+web:
+  static-location: classpath:/static/
 
 # Session配置
 security:

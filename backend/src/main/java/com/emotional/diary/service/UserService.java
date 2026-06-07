@@ -95,4 +95,21 @@ public class UserService {
     public boolean checkUsernameExists(String username) {
         return userMapper.findByUsername(username) != null;
     }
+
+    public void updateProfile(Long userId, java.util.Map<String, String> params) {
+        SysUser user = userMapper.findById(userId);
+        if (user == null) {
+            throw new RuntimeException("用户不存在");
+        }
+        if (params.containsKey("nickname")) {
+            user.setNickname(params.get("nickname"));
+        }
+        if (params.containsKey("realName")) {
+            user.setRealName(params.get("realName"));
+        }
+        if (params.containsKey("newPassword") && !params.get("newPassword").isEmpty()) {
+            user.setPassword(encodePassword(params.get("newPassword")));
+        }
+        userMapper.update(user);
+    }
 }

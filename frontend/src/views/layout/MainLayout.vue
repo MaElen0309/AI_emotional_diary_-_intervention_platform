@@ -48,7 +48,7 @@
           <template #title>AI分析</template>
         </el-menu-item>
 
-        <template v-if="isAdmin">
+        <template v-if="isTeacherOrAdmin">
           <div class="menu-divider" />
           <el-sub-menu index="admin">
             <template #title>
@@ -57,8 +57,10 @@
             </template>
             <el-menu-item index="/admin/users">用户管理</el-menu-item>
             <el-menu-item index="/admin/audit">审核管理</el-menu-item>
-            <el-menu-item index="/admin/solution-manage">方案管理</el-menu-item>
-            <el-menu-item index="/admin/config">系统配置</el-menu-item>
+            <template v-if="isSuperAdmin">
+              <el-menu-item index="/admin/solution-manage">方案管理</el-menu-item>
+              <el-menu-item index="/admin/config">系统配置</el-menu-item>
+            </template>
           </el-sub-menu>
         </template>
       </el-menu>
@@ -119,6 +121,8 @@ const userInfo = ref<any>({})
 
 const activeMenu = computed(() => route.path)
 const isAdmin = computed(() => userInfo.value.role === 2)
+const isTeacherOrAdmin = computed(() => (userInfo.value.role ?? 0) >= 1)
+const isSuperAdmin = computed(() => userInfo.value.role === 2)
 const isMobile = computed(() => windowWidth.value < 768)
 
 const avatarText = computed(() => {
@@ -163,11 +167,14 @@ const toggleSidebar = () => {
 
 const handleCommand = (command: string) => {
   switch (command) {
-    case 'logout':
-      handleLogout()
+    case 'profile':
+      router.push('/profile')
       break
     case 'password':
-      ElMessage.info('修改密码功能开发中')
+      router.push('/profile')
+      break
+    case 'logout':
+      handleLogout()
       break
   }
 }
@@ -318,6 +325,37 @@ $border-color: #e2e8f0;
 
     .el-sub-menu.is-opened > .el-sub-menu__title {
       color: white;
+    }
+
+    /* 子菜单样式 */
+    :deep(.el-sub-menu__icon-arrow) {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .el-menu {
+      background: transparent !important;
+
+      .el-menu-item {
+        color: rgba(255, 255, 255, 0.8) !important;
+        height: 42px;
+        line-height: 42px;
+        padding-left: 52px !important;
+        min-width: auto;
+        border-radius: 8px;
+        margin-bottom: 2px;
+        background: transparent !important;
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.1) !important;
+          color: #fff !important;
+        }
+
+        &.is-active {
+          background: rgba($primary, 0.25) !important;
+          color: #fff !important;
+          font-weight: 600;
+        }
+      }
     }
 
     .el-menu--collapse {

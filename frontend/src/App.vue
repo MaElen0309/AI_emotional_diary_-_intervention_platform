@@ -69,6 +69,20 @@ body {
   padding: 2px 10px !important;
 }
 
+/* 侧边栏子菜单背景修复 */
+.el-menu--inline {
+  background: transparent !important;
+}
+.el-menu--inline .el-menu-item {
+  color: rgba(255, 255, 255, 0.8) !important;
+  background: transparent !important;
+}
+.el-menu--inline .el-menu-item:hover,
+.el-menu--inline .el-menu-item.is-active {
+  background: rgba(108, 99, 255, 0.2) !important;
+  color: #fff !important;
+}
+
 /* 滚动条美化 */
 ::-webkit-scrollbar {
   width: 6px;
