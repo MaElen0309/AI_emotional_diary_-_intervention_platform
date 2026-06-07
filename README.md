@@ -334,9 +334,9 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/emotional_diary?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
     username: root        # 你的MySQL用户名
-    password: 123456      # 你的MySQL密码
+    password: 1234     # 你的MySQL密码
 
-# 通义千问 API Key（需要去阿里云申请）
+
 dashscope:
   api-key: sk-xxxxxxxxxxxxxxxxxxxxxxxx
 ```
