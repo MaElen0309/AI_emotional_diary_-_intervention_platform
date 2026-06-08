@@ -3,7 +3,6 @@ package com.emotional.diary.config;
 import com.emotional.diary.interceptor.AuthInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -14,7 +13,7 @@ import java.io.IOException;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    @Resource
+    @javax.annotation.Resource
     private AuthInterceptor authInterceptor;
 
     @Override
@@ -44,15 +43,16 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // 检查前端构建产物是否存在
-        Resource indexResource = new ClassPathResource("static/index.html");
+        org.springframework.core.io.Resource indexResource = new ClassPathResource("static/index.html");
         if (indexResource.exists()) {
             registry.addResourceHandler("/**")
                     .addResourceLocations("classpath:/static/")
                     .resourceChain(true)
                     .addResolver(new PathResourceResolver() {
                         @Override
-                        protected Resource getResource(String resourcePath, Resource location) throws IOException {
-                            Resource requested = location.createRelative(resourcePath);
+                        protected org.springframework.core.io.Resource getResource(String resourcePath,
+                                org.springframework.core.io.Resource location) throws IOException {
+                            org.springframework.core.io.Resource requested = location.createRelative(resourcePath);
                             if (requested.exists() && requested.isReadable()) {
                                 return requested;
                             }

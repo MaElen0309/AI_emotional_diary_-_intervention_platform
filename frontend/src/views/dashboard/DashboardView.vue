@@ -95,7 +95,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onActivated } from 'vue'
 import request from '@/utils/request'
 
 const stats = ref({
@@ -114,19 +114,26 @@ const statCards = [
   { key: 'solutionCount', label: '方案数量', icon: 'FolderOpened', color: '#ef4444' },
 ]
 
-onMounted(async () => {
+const loadStats = async () => {
   try {
-    const [diaryRes] = await Promise.all([
-      request.get('/diary', { params: { pageNum: 1, pageSize: 5 } })
+    const [diaryRes, treeholeRes] = await Promise.all([
+      request.get('/diary', { params: { pageNum: 1, pageSize: 5 } }),
+      request.get('/treehole/published', { params: { pageNum: 1, pageSize: 1 } })
     ])
     if (diaryRes.data?.list) {
       recentDiaries.value = diaryRes.data.list
       stats.value.diaryCount = diaryRes.data.total || 0
     }
+    if (treeholeRes.data) {
+      stats.value.treeholeCount = treeholeRes.data.total || 0
+    }
   } catch (error) {
     console.error('获取数据失败', error)
   }
-})
+}
+
+onMounted(loadStats)
+onActivated(loadStats)
 
 const getEmotionLabel = (type: number) => {
   const map: Record<number, string> = { 1: '开心', 2: '平静', 3: '焦虑', 4: '悲伤', 5: '愤怒', 6: '恐惧', 7: '其他' }
