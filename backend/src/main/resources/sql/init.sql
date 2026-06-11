@@ -92,6 +92,17 @@ CREATE TABLE treehole_comment (
     FOREIGN KEY (content_id) REFERENCES treehole_content(id)
 ) ENGINE=InnoDB COMMENT='树洞评论表';
 
+-- 树洞收藏表
+CREATE TABLE IF NOT EXISTS treehole_favorite (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '收藏ID',
+    content_id BIGINT NOT NULL COMMENT '树洞内容ID',
+    user_id BIGINT NOT NULL COMMENT '收藏用户ID',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '收藏时间',
+    UNIQUE KEY uk_content_user (content_id, user_id),
+    INDEX idx_content_id (content_id),
+    INDEX idx_user_id (user_id)
+) ENGINE=InnoDB COMMENT='树洞收藏表';
+
 -- 心理调节方案表
 CREATE TABLE solution (
     id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '方案ID',

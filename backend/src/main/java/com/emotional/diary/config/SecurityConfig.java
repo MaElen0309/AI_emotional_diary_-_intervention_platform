@@ -37,11 +37,21 @@ public class SecurityConfig {
             HttpServletResponse res = (HttpServletResponse) response;
             String path = req.getRequestURI();
 
-            // TODO: 调试阶段暂时放行所有路径，确认登录功能正常后再启用权限控制
-            // if (isPublicPath(req, path)) {
-            // chain.doFilter(request, response);
-            // return;
-            // }
+            // 从 Session 获取当前用户ID，设置到 request 属性中
+            HttpSession session = req.getSession(false);
+            if (session != null && session.getAttribute("currentUser") != null) {
+                Object user = session.getAttribute("currentUser");
+                // 如果是 Map 类型（登录时存入的），获取 id 字段
+                if (user instanceof Map) {
+                    Object userId = ((Map<?, ?>) user).get("id");
+                    if (userId != null) {
+                        req.setAttribute("currentUserId", Long.valueOf(userId.toString()));
+                    }
+                } else if (user instanceof com.emotional.diary.entity.SysUser) {
+                    req.setAttribute("currentUserId", ((com.emotional.diary.entity.SysUser) user).getId());
+                }
+            }
+
             chain.doFilter(request, response);
             return;
 
